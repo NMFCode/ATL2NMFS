@@ -1,0 +1,49 @@
+module A2BUniqueLazy;
+create OUT1 : TypeB, OUT2 : TypeC from IN1 : TypeA;
+
+rule RuleA {
+	from
+		s : TypeA!A
+	to
+		t : TypeB!A(
+			name <- 'OUT_' + s.name,
+			bElements <- s.bElements->collect(b | thisModule.RuleB(b)),
+			cElements <- s.cElements->collect(c | thisModule.RuleC(c))
+		)
+}
+
+unique lazy rule RuleB {
+	from
+		s : TypeA!B
+	to
+		t : TypeB!B(
+			name <- 'OUT_' + s.name,
+			description1 <- descriptionPatternElement1,
+			description2 <- descriptionPatternElement2
+		),
+		descriptionPatternElement1 : TypeB!BDescription1(
+			description <- 'OUT_' + s.description1
+		),
+		descriptionPatternElement2 : TypeB!BDescription2(
+			description <- 'OUT_' + s.description2
+		),
+		descriptionPatternElement3 : TypeB!BDescription3(
+			description <- 'OUT_' + s.description3
+		)
+}
+
+unique lazy rule RuleC {
+	from
+		s : TypeA!C
+	to
+		t : TypeB!C(
+			name <- 'OUT_' + s.name,
+			description <- descriptionPatternElement1
+		),
+		descriptionPatternElement1 : TypeB!CDescription(
+			description <- 'OUT_' + s.description1
+		),
+		c : TypeC!CElement(
+			elementName <- 'OUT_' + s.description2
+		)
+}

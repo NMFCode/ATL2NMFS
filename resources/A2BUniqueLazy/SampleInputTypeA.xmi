@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ASCII"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tpA="platform:/resource/A2BUniqueLazy/Metamodel/TypeA.ecore">
+	<tpA:A name="A1">
+	  <bElements name="B1" description1="description1 A1 B1" description2="description2 A1 B1" description3="description3 A1 B1"/>
+	  <bElements name="B2" description1="description1 A1 B2" description2="description2 A1 B2" description3="description3 A1 B2"/>
+	  <cElements name="C1" description1="description1 A1 C1" description2="description2 A1 C1"/>
+	</tpA:A>
+	<tpA:A xsi:type="A" name="A2">
+	  <bElements name="B3" description1="description1 A2 B3" description2="description2 A2 B3" description3="description3 A2 B3"/>
+	  <bElements name="B4" description1="description1 A2 B4" description2="description2 A2 B4" description3="description3 A2 B4"/>
+	  <bElements name="B5" description1="description1 A2 B5" description2="description2 A2 B5" description3="description3 A2 B5"/>
+	  <cElements name="C2" description1="description1 A2 C2" description2="description2 A2 C2"/>
+	  <cElements name="C3" description1="description1 A2 C3" description2="description2 A2 C3"/>
+	</tpA:A>
+	<tpA:A xsi:type="A" name="A3"/>
+</xmi:XMI>

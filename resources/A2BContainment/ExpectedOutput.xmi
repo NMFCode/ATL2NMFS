@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:tpB="platform:/resource/A2BContainment/Metamodel/TypeB.ecore">
+  <tpB:A name="A1">
+    <elms name="B1"/>
+  </tpB:A>
+  <tpB:B name="B2">
+    <elms name="A2"/>
+  </tpB:B>
+</xmi:XMI>
