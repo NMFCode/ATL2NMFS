@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="ASCII"?>
+<Root xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.eclipse.org/atl/atlTransformations/XML" name="DXF">
+  <childrenXML xsi:type="Element" name="Mesh">
+    <childrenXML xsi:type="Attribute" name="name" value="Mesh #1"/>
+    <childrenXML xsi:type="Element" name="Point">
+      <childrenXML xsi:type="Attribute" name="name" value="p0"/>
+      <childrenXML xsi:type="Attribute" name="x" value="20.0"/>
+      <childrenXML xsi:type="Attribute" name="y" value="0.0"/>
+      <childrenXML xsi:type="Attribute" name="z" value="0.0"/>
+    </childrenXML>
+    <childrenXML xsi:type="Element" name="Point">
+      <childrenXML xsi:type="Attribute" name="name" value="p1"/>
+      <childrenXML xsi:type="Attribute" name="x" value="20.70710678118"/>
+      <childrenXML xsi:type="Attribute" name="y" value="0.0"/>
+      <childrenXML xsi:type="Attribute" name="z" value="0.707106781186"/>
+    </childrenXML>
+    <childrenXML xsi:type="Element" name="Point">
+      <childrenXML xsi:type="Attribute" name="name" value="p2"/>
+      <childrenXML xsi:type="Attribute" name="x" value="20.20710678118"/>
+      <childrenXML xsi:type="Attribute" name="y" value="0.707106781186"/>
+      <childrenXML xsi:type="Attribute" name="z" value="1.207106781186"/>
+    </childrenXML>
+    <childrenXML xsi:type="Element" name="Point">
+      <childrenXML xsi:type="Attribute" name="name" value="p3"/>
+      <childrenXML xsi:type="Attribute" name="x" value="19.5"/>
+      <childrenXML xsi:type="Attribute" name="y" value="0.707106781186"/>
+      <childrenXML xsi:type="Attribute" name="z" value="0.5"/>
+    </childrenXML>
+  </childrenXML>
+  <childrenXML xsi:type="Element" name="Mesh">
+    <childrenXML xsi:type="Attribute" name="name" value="Mesh #2"/>
+    <childrenXML xsi:type="Element" name="Point">
+      <childrenXML xsi:type="Attribute" name="name" value="p0"/>
+      <childrenXML xsi:type="Attribute" name="x" value="19.0"/>
+      <childrenXML xsi:type="Attribute" name="y" value="1.110223024625"/>
+      <childrenXML xsi:type="Attribute" name="z" value="1.0"/>
+    </childrenXML>
+    <childrenXML xsi:type="Element" name="Point">
+      <childrenXML xsi:type="Attribute" name="name" value="p1"/>
+      <childrenXML xsi:type="Attribute" name="x" value="19.70710678118"/>
+      <childrenXML xsi:type="Attribute" name="y" value="1.110223024625"/>
+      <childrenXML xsi:type="Attribute" name="z" value="1.707106781186"/>
+    </childrenXML>
+    <childrenXML xsi:type="Element" name="Point">
+      <childrenXML xsi:type="Attribute" name="name" value="p2"/>
+      <childrenXML xsi:type="Attribute" name="x" value="20.20710678118"/>
+      <childrenXML xsi:type="Attribute" name="y" value="-0.707106781186"/>
+      <childrenXML xsi:type="Attribute" name="z" value="1.207106781186"/>
+    </childrenXML>
+    <childrenXML xsi:type="Element" name="Point">
+      <childrenXML xsi:type="Attribute" name="name" value="p3"/>
+      <childrenXML xsi:type="Attribute" name="x" value="19.5"/>
+      <childrenXML xsi:type="Attribute" name="y" value="-0.707106781186"/>
+      <childrenXML xsi:type="Attribute" name="z" value="0.5"/>
+    </childrenXML>
+  </childrenXML>
+  <childrenXML xsi:type="Element" name="Mesh">
+    <childrenXML xsi:type="Attribute" name="name" value="Mesh #3"/>
+    <childrenXML xsi:type="Element" name="Point">
+      <childrenXML xsi:type="Attribute" name="name" value="p0"/>
+      <childrenXML xsi:type="Attribute" name="x" value="20.0"/>
+      <childrenXML xsi:type="Attribute" name="y" value="0.0"/>
+      <childrenXML xsi:type="Attribute" name="z" value="0.0"/>
+    </childrenXML>
+    <childrenXML xsi:type="Element" name="Point">
+      <childrenXML xsi:type="Attribute" name="name" value="p1"/>
+      <childrenXML xsi:type="Attribute" name="x" value="19.5"/>
+      <childrenXML xsi:type="Attribute" name="y" value="-0.707106781186"/>
+      <childrenXML xsi:type="Attribute" name="z" value="0.5"/>
+    </childrenXML>
+    <childrenXML xsi:type="Element" name="Point">
+      <childrenXML xsi:type="Attribute" name="name" value="p2"/>
+      <childrenXML xsi:type="Attribute" name="x" value="19.0"/>
+      <childrenXML xsi:type="Attribute" name="y" value="1.110223024625"/>
+      <childrenXML xsi:type="Attribute" name="z" value="1.0"/>
+    </childrenXML>
+    <childrenXML xsi:type="Element" name="Point">
+      <childrenXML xsi:type="Attribute" name="name" value="p3"/>
+      <childrenXML xsi:type="Attribute" name="x" value="19.5"/>
+      <childrenXML xsi:type="Attribute" name="y" value="0.707106781186"/>
+      <childrenXML xsi:type="Attribute" name="z" value="0.5"/>
+    </childrenXML>
+  </childrenXML>
+  <childrenXML xsi:type="Element" name="Mesh">
+    <childrenXML xsi:type="Attribute" name="name" value="Mesh #4"/>
+    <childrenXML xsi:type="Element" name="Point">
+      <childrenXML xsi:type="Attribute" name="name" value="p0"/>
+      <childrenXML xsi:type="Attribute" name="x" value="20.20710678118"/>
+      <childrenXML xsi:type="Attribute" name="y" value="0.707106781186"/>
+      <childrenXML xsi:type="Attribute" name="z" value="1.207106781186"/>
+    </childrenXML>
+    <childrenXML xsi:type="Element" name="Point">
+      <childrenXML xsi:type="Attribute" name="name" value="p1"/>
+      <childrenXML xsi:type="Attribute" name="x" value="19.70710678118"/>
+      <childrenXML xsi:type="Attribute" name="y" value="1.110223024625"/>
+      <childrenXML xsi:type="Attribute" name="z" value="1.707106781186"/>
+    </childrenXML>
+    <childrenXML xsi:type="Element" name="Point">
+      <childrenXML xsi:type="Attribute" name="name" value="p2"/>
+      <childrenXML xsi:type="Attribute" name="x" value="20.20710678118"/>
+      <childrenXML xsi:type="Attribute" name="y" value="-0.707106781186"/>
+      <childrenXML xsi:type="Attribute" name="z" value="1.207106781186"/>
+    </childrenXML>
+    <childrenXML xsi:type="Element" name="Point">
+      <childrenXML xsi:type="Attribute" name="name" value="p3"/>
+      <childrenXML xsi:type="Attribute" name="x" value="20.70710678118"/>
+      <childrenXML xsi:type="Attribute" name="y" value="0.0"/>
+      <childrenXML xsi:type="Attribute" name="z" value="0.707106781186"/>
+    </childrenXML>
+  </childrenXML>
+  <childrenXML xsi:type="Element" name="Mesh">
+    <childrenXML xsi:type="Attribute" name="name" value="Mesh #5"/>
+    <childrenXML xsi:type="Element" name="Point">
+      <childrenXML xsi:type="Attribute" name="name" value="p0"/>
+      <childrenXML xsi:type="Attribute" name="x" value="20.0"/>
+      <childrenXML xsi:type="Attribute" name="y" value="0.0"/>
+      <childrenXML xsi:type="Attribute" name="z" value="0.0"/>
+    </childrenXML>
+    <childrenXML xsi:type="Element" name="Point">
+      <childrenXML xsi:type="Attribute" name="name" value="p1"/>
+      <childrenXML xsi:type="Attribute" name="x" value="20.70710678118"/>
+      <childrenXML xsi:type="Attribute" name="y" value="0.0"/>
+      <childrenXML xsi:type="Attribute" name="z" value="0.707106781186"/>
+    </childrenXML>
+    <childrenXML xsi:type="Element" name="Point">
+      <childrenXML xsi:type="Attribute" name="name" value="p2"/>
+      <childrenXML xsi:type="Attribute" name="x" value="20.20710678118"/>
+      <childrenXML xsi:type="Attribute" name="y" value="-0.70710678118"/>
+      <childrenXML xsi:type="Attribute" name="z" value="1.207106781186"/>
+    </childrenXML>
+    <childrenXML xsi:type="Element" name="Point">
+      <childrenXML xsi:type="Attribute" name="name" value="p3"/>
+      <childrenXML xsi:type="Attribute" name="x" value="19.5"/>
+      <childrenXML xsi:type="Attribute" name="y" value="-0.707106781186"/>
+      <childrenXML xsi:type="Attribute" name="z" value="0.5"/>
+    </childrenXML>
+  </childrenXML>
+  <childrenXML xsi:type="Element" name="Mesh">
+    <childrenXML xsi:type="Attribute" name="name" value="Mesh #6"/>
+    <childrenXML xsi:type="Element" name="Point">
+      <childrenXML xsi:type="Attribute" name="name" value="p0"/>
+      <childrenXML xsi:type="Attribute" name="x" value="19.5"/>
+      <childrenXML xsi:type="Attribute" name="y" value="0.707106781186"/>
+      <childrenXML xsi:type="Attribute" name="z" value="0.5"/>
+    </childrenXML>
+    <childrenXML xsi:type="Element" name="Point">
+      <childrenXML xsi:type="Attribute" name="name" value="p1"/>
+      <childrenXML xsi:type="Attribute" name="x" value="20.20710678118"/>
+      <childrenXML xsi:type="Attribute" name="y" value="0.707106781186"/>
+      <childrenXML xsi:type="Attribute" name="z" value="1.207106781186"/>
+    </childrenXML>
+    <childrenXML xsi:type="Element" name="Point">
+      <childrenXML xsi:type="Attribute" name="name" value="p2"/>
+      <childrenXML xsi:type="Attribute" name="x" value="19.70710678118"/>
+      <childrenXML xsi:type="Attribute" name="y" value="1.110223024625"/>
+      <childrenXML xsi:type="Attribute" name="z" value="1.707106781186"/>
+    </childrenXML>
+    <childrenXML xsi:type="Element" name="Point">
+      <childrenXML xsi:type="Attribute" name="name" value="p3"/>
+      <childrenXML xsi:type="Attribute" name="x" value="19.0"/>
+      <childrenXML xsi:type="Attribute" name="y" value="1.110223024625"/>
+      <childrenXML xsi:type="Attribute" name="z" value="1.0"/>
+    </childrenXML>
+  </childrenXML>
+</Root>

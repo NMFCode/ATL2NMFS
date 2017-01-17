@@ -1,0 +1,30 @@
+module PortV3;
+create inB : TypeB from inA : TypeA;
+
+rule BlkA2BlkB {
+	from
+		blkA : TypeA!BlockA
+	to
+		blkB : TypeB!BlockB (
+			inputPorts <- blkA.inputPorts,
+			outputPorts <- blkA.outputPorts
+		)
+}
+
+rule PortA2InPortB {
+	from
+		s : TypeA!PortA (TypeA!BlockA.allInstances()->select(e | e.inputPorts->includes(s))->notEmpty())
+	to
+		t : TypeB!InPortB (
+			name <- s.name
+		)
+}
+
+rule PortA2OutPortB {
+	from
+		s : TypeA!PortA (TypeA!BlockA.allInstances()->select(e | e.outputPorts->includes(s))->notEmpty())
+	to
+		t : TypeB!OutPortB (
+			name <- s.name
+		)
+}

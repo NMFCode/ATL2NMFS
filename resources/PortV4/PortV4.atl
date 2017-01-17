@@ -1,0 +1,30 @@
+module PortV4;
+create inB : TypeB from inA : TypeA;
+
+rule BlkA2BlkB {
+	from
+		blkA : TypeA!BlockA
+	to
+		blkB : TypeB!BlockB (
+			inputPorts <- blkA.inputPorts,
+			outputPorts <- blkA.outputPorts
+		)
+}
+
+rule PortA2InPortB {
+	from
+		s : TypeA!PortA (s.refImmediateComposite().inputPorts->includes(s))
+	to
+		t : TypeB!InPortB (
+			name <- s.name
+		)
+}
+
+rule PortA2OutPortB {
+	from
+		s : TypeA!PortA (s.refImmediateComposite().outputPorts->includes(s))
+	to
+		t : TypeB!OutPortB (
+			name <- s.name
+		)
+}

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+    <PropertyGroup>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <ItemGroup>
+	    <Reference Include="NMF.Collections">
+	      <HintPath>Libs\NMF.Collections.dll</HintPath>
+	    </Reference>
+	    <Reference Include="NMF.Expressions">
+	      <HintPath>Libs\NMF.Expressions.dll</HintPath>
+	    </Reference>
+	    <Reference Include="NMF.Expressions.Linq">
+	      <HintPath>Libs\NMF.Expressions.Linq.dll</HintPath>
+	    </Reference>
+	    <Reference Include="NMF.Models">
+	      <HintPath>Libs\NMF.Models.dll</HintPath>
+	    </Reference>
+	    <Reference Include="NMF.Serialization">
+	      <HintPath>Libs\NMF.Serialization.dll</HintPath>
+	    </Reference>
+	    <Reference Include="NMF.Synchronizations">
+	      <HintPath>Libs\NMF.Synchronizations.dll</HintPath>
+	    </Reference>
+	    <Reference Include="NMF.Transformations">
+	      <HintPath>Libs\NMF.Transformations.dll</HintPath>
+	    </Reference>
+	    <Reference Include="NMF.Transformations.Core">
+	      <HintPath>Libs\NMF.Transformations.Core.dll</HintPath>
+	    </Reference>
+	    <Reference Include="NMF.Utilities">
+	      <HintPath>Libs\NMF.Utilities.dll</HintPath>
+	    </Reference>
+        <Reference Include="System" />
+        <Reference Include="System.Core" />
+        <Reference Include="System.Data" />
+        <Reference Include="System.Data.DataSetExtensions" />
+        <Reference Include="System.Net.Http" />
+        <Reference Include="Microsoft.CSharp" />
+        <Reference Include="System.Xml" />
+        <Reference Include="System.Xml.Linq" />
+    </ItemGroup>
+    <ItemGroup>
+    	<Compile Include="program.cs" />
+    	<Compile Include="FSM2PN.cs" />
+    	<Compile Include="FSM.cs" />
+    	<Compile Include="PN.cs" />
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
