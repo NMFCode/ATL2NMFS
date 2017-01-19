@@ -1,0 +1,24 @@
+-- @atlcompiler emftvm
+
+module A2BContainment;
+create OUT : TypeB from IN : TypeA;
+
+rule RuleA {
+	from
+		s : TypeA!A
+	to
+		t : TypeB!A(
+			name <- s.nameA,
+			elms <- s.elms
+		)
+}
+
+rule RuleB {
+	from
+		s : TypeA!B
+	to
+		t : TypeB!B(
+			name <- s.nameB,
+			elms <- s.elms
+		)
+}

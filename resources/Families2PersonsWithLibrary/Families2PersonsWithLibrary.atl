@@ -1,0 +1,22 @@
+module Families2PersonsWithLibrary;
+create OUT : Persons from IN : Families;
+
+uses Lib4Families2PersonsWithLibrary;
+
+rule Member2Male {
+	from
+		s : Families!Member (not s.isFemale())
+	to
+		t : Persons!Male (
+			fullName <- s.firstName + ' ' + s.familyName	
+		)
+}
+
+rule Member2Female {
+	from
+		s : Families!Member (s.isFemale())
+	to
+		t : Persons!Female (
+			fullName <- s.firstName + ' ' + s.familyName	
+		)
+}

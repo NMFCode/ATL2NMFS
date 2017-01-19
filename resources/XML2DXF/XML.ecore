@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="ASCII"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="XML" nsURI="http://www.eclipse.org/atl/atlTransformations/XML"
+    nsPrefix="prefixXml">
+  <eClassifiers xsi:type="ecore:EClass" name="Node" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentXML" ordered="false"
+        eType="#//Element" eOpposite="#//Element/childrenXML"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Attribute" eSuperTypes="#//Node"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TextNode" eSuperTypes="#//Node"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Element" eSuperTypes="#//Node">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="childrenXML" upperBound="-1"
+        eType="#//Node" containment="true" eOpposite="#//Node/parentXML"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Root" eSuperTypes="#//Element"/>
+</ecore:EPackage>
