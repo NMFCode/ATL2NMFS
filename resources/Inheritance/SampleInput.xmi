@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ASCII"?>
+<ListElement xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.eclipse.org/atl/atlTransformations/TypeA" nameListElement="List1">
+	<elements xsi:type="B" nameA="A1" nameB="B1"/>
+	<elements xsi:type="B" nameA="A2" nameB="B2"/>
+	<elements xsi:type="C" nameA="A3" nameB="B3" nameC="C1"/>
+	<elements xsi:type="B" nameA="A4" nameB="B4"/>
+	<elements xsi:type="C" nameA="A5" nameB="B5" nameC="C2"/>
+	<elements xsi:type="D" nameA="A6" nameD="D1"/>
+	<xyElements xsi:type="ObjectX" nameX="X1"/>
+	<xyElements xsi:type="ObjectY" nameX="X2" nameY="Y1"/>
+	<xyElements xsi:type="ObjectY" nameX="X3" nameY="Y2"/>
+	<xyElements xsi:type="ObjectX" nameX="X4"/>
+	<rsElements xsi:type="ObjectS" nameR="R1" nameS="S1"/>
+	<rsElements xsi:type="ObjectR" nameR="R2"/>
+	<rsElements xsi:type="ObjectS" nameR="R3" nameS="S1"/>
+</ListElement>

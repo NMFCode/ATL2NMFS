@@ -1,0 +1,31 @@
+module A2BMultipleInputDifferentType;
+create OUT : TypeB from IN1 : TypeA, IN2 : TypeC;
+
+rule RuleA {
+	from
+		s : TypeA!A
+	to
+		t : TypeB!A(
+			name <- 'OUT_' + s.nameA,
+			elms <- s.elms
+		)
+}
+
+rule RuleB {
+	from
+		s : TypeA!B
+	to
+		t : TypeB!B(
+			name <- 'OUT_' + s.nameB,
+			elms <- s.elms
+		)
+}
+
+rule RuleC {
+	from
+		s : TypeC!CElement
+	to
+		t : TypeB!C(
+			name <- 'OUT_' + s.elementName
+		)
+}

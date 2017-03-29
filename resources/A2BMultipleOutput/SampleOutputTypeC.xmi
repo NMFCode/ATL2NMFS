@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:tpC="platform:/resource/A2BMultipleOutput/Metamodel/TypeC.ecore">
+  <tpC:CElement elementName="OUT_A1"/>
+  <tpC:CElement elementName="OUT_A2"/>
+  <tpC:CElement elementName="OUT_A3"/>
+  <tpC:CElement elementName="OUT_B1"/>
+  <tpC:CElement elementName="OUT_B2"/>
+  <tpC:CElement elementName="OUT_B3"/>
+  <tpC:CElement elementName="OUT_B4"/>
+  <tpC:CElement elementName="OUT_B5"/>
+</xmi:XMI>

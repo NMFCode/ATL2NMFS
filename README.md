@@ -1,2 +1,3 @@
-# ATL2NMFS
-Higher-order transformation from ATL to NMF Synchronizations
+# atl2nmfs
+
+Is a higher-order transformation (HOT) that transforms an ATL transformation into a NMF Synchronizations synchronization. 

@@ -1,0 +1,103 @@
+module Inheritance;
+create OUT : TypeB from IN : TypeA;
+
+
+rule RuleListElement2ListElement {
+	from
+		s : TypeA!ListElement
+	to
+		t : TypeB!ListElement(
+			nameListElement <- s.nameListElement,
+			elements <- s.elements,
+			xyElements <- s.xyElements,
+			rsElements <- s.rsElements
+		)
+}
+
+
+rule RuleObjectX2ElementX {
+	from
+		s : TypeA!ObjectX(
+			s.oclIsTypeOf(TypeA!ObjectX)
+		)
+	to
+		t : TypeB!ElementX(
+			nameX <- 'Name Object X: ' + s.nameX
+		)
+}
+
+
+rule RuleObjectY2ElementY {
+	from
+		s : TypeA!ObjectY(
+			s.oclIsTypeOf(TypeA!ObjectY)
+		)
+	to
+		t : TypeB!ElementY(
+			nameX <- 'Name Object X: ' + s.nameX,
+			nameY <- 'Name Object Y: ' + s.nameY
+		)
+}
+
+
+rule RuleObjectS2ElementS {
+	from
+		s : TypeA!ObjectS(
+			s.oclIsTypeOf(TypeA!ObjectS)
+		)
+	to
+		t : TypeB!ElementS(
+			nameR <- 'Name Object R: ' + s.nameR,
+			nameS <- 'Name Object S: ' + s.nameS			
+		)
+}
+
+
+rule RuleObjectR2ElementX {
+	from
+		s : TypeA!ObjectR(
+			s.oclIsTypeOf(TypeA!ObjectR)
+		)
+	to
+		t : TypeB!ElementX(
+			nameX <- 'Name Object X (von Object R Element): ' + s.nameR	
+		)
+}
+
+
+rule RuleD2Element {
+	from
+		s : TypeA!D
+	to
+		t : TypeB!Element(
+			abstractBaseName <- 'Name A: ' + s.nameA,
+			nameElement <- 'Name D: ' + s.nameD,
+			type <- 'D'
+		)
+}
+
+rule RuleB2Element {
+	from
+		s : TypeA!B(
+			s.nameA = 'A1'
+		)
+	to
+		t : TypeB!Element(
+			abstractBaseName <- 'Name A: ' + s.nameA,
+			nameElement <- 'Name B: ' + s.nameB,
+			type <- 'B'
+		)
+}
+
+rule RuleB2SubElement {
+	from
+		s : TypeA!B(
+			s.nameA <> 'A1'
+		)
+	to
+		t : TypeB!SubElement(
+			abstractBaseName <- 'Name A: ' + s.nameA,
+			nameElement <- 'Name B: ' + s.nameB,
+			type <- 'B'
+		)
+}

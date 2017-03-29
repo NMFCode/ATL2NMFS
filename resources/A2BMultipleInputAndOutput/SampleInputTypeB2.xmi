@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="ASCII"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:tpB="platform:/resource/A2BMultipleInputAndOutput/Metamodel/TypeB.ecore">
+	<tpB:BDoubleElement doubleValue="21.0"/>
+	<tpB:BStringElement stringValue="B2_string_value1"/>
+	<tpB:BDoubleElement doubleValue="22.0"/>
+</xmi:XMI>

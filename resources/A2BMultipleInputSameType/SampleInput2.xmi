@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="ASCII"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:tpA="platform:/resource/A2BMultipleInputSameType/Metamodel/TypeA.ecore">
+	<tpA:B nameB="B6">
+	  <elms nameA="A3"/>
+	  <elms nameA="A4"/>
+	</tpA:B>
+	<tpA:B nameB="B7"/>
+</xmi:XMI>

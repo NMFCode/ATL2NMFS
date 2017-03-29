@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:tpC="platform:/resource/A2BMultipleInputAndOutput/Metamodel/TypeC.ecore">
+  <tpC:AElementName name="A1"/>
+  <tpC:AElementName name="A2"/>
+  <tpC:AElementName name="A3"/>
+  <tpC:BElementName name="B1"/>
+  <tpC:BElementName name="B2"/>
+  <tpC:BElementName name="B3"/>
+  <tpC:BElementName name="B4"/>
+  <tpC:BElementName name="B5"/>
+  <tpC:CStringElement stringValue="OUT_B1_string_value1"/>
+  <tpC:CStringElement stringValue="OUT_B1_string_value2"/>
+  <tpC:CStringElement stringValue="OUT_B1_string_value3"/>
+  <tpC:CStringElement stringValue="OUT_B1_string_value4"/>
+  <tpC:CStringElement stringValue="OUT_B2_string_value1"/>
+  <tpC:CDoubleElement doubleValue="11.0"/>
+  <tpC:CDoubleElement doubleValue="12.0"/>
+  <tpC:CDoubleElement doubleValue="13.0"/>
+  <tpC:CDoubleElement doubleValue="14.0"/>
+  <tpC:CDoubleElement doubleValue="21.0"/>
+  <tpC:CDoubleElement doubleValue="22.0"/>
+</xmi:XMI>

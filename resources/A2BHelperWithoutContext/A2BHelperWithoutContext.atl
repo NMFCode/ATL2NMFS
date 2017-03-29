@@ -1,0 +1,48 @@
+module A2BHelperWithoutContext;
+create OUT : TypeB from IN : TypeA;
+
+
+helper def: nameExtension : String =
+	'Extension';
+
+
+helper def: firstAElement : TypeA!A =
+	TypeA!A.allInstances()->first();
+
+
+helper def: aElementWithName(name : String) : TypeA!A =
+	TypeA!A.allInstances()->any(element | element.nameA = name);
+	
+	
+helper def: testNameOfAElement(name : String, element : TypeA!A) : Boolean =
+	if (element.nameA = name) 
+		then true
+		else false
+	endif;
+	
+	
+	
+	
+
+rule RuleA {
+	from
+		s : TypeA!A
+	to
+		t : TypeB!A(
+			name <- s.nameA + thisModule.nameExtension,
+			elms <- s.elms,
+			isNameABC <- thisModule.testNameOfAElement('ABC', s)
+		)
+}
+
+rule RuleB {
+	from
+		s : TypeA!B
+	to
+		t : TypeB!B(
+			name <- s.nameB + thisModule.nameExtension,
+			firstAElement <- thisModule.firstAElement,
+			aElementWithName <- thisModule.aElementWithName('ABC'),
+			elms <- s.elms
+		)
+}

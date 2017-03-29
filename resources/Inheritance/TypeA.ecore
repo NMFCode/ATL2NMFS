@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore">
+	<ecore:EPackage name="TypeA" nsURI="http://www.eclipse.org/atl/atlTransformations/TypeA" nsPrefix="TypeA">
+	  <eClassifiers xsi:type="ecore:EClass" name="ListElement">
+		<eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1" eType="#/0/AA" containment="true"/>
+		<eStructuralFeatures xsi:type="ecore:EReference" name="xyElements" upperBound="-1" eType="#/0/ObjectX" containment="true"/>
+		<eStructuralFeatures xsi:type="ecore:EReference" name="rsElements" upperBound="-1" eType="#/0/ObjectR" containment="true"/>
+		<eStructuralFeatures xsi:type="ecore:EAttribute" name="nameListElement" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+	  </eClassifiers>
+	  <eClassifiers xsi:type="ecore:EClass" name="AA" abstract="true">
+		<eStructuralFeatures xsi:type="ecore:EAttribute" name="nameA" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+	  </eClassifiers>
+	  <eClassifiers xsi:type="ecore:EClass" name="B" eSuperTypes="#/0/AA">
+		<eStructuralFeatures xsi:type="ecore:EAttribute" name="nameB" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+	  </eClassifiers>
+	  <eClassifiers xsi:type="ecore:EClass" name="C" eSuperTypes="#/0/B">
+		<eStructuralFeatures xsi:type="ecore:EAttribute" name="nameC" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+	  </eClassifiers>
+	  <eClassifiers xsi:type="ecore:EClass" name="D" eSuperTypes="#/0/AA">
+		<eStructuralFeatures xsi:type="ecore:EAttribute" name="nameD" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+	  </eClassifiers>
+	  <eClassifiers xsi:type="ecore:EClass" name="ObjectX">
+		<eStructuralFeatures xsi:type="ecore:EAttribute" name="nameX" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+	  </eClassifiers>
+	  <eClassifiers xsi:type="ecore:EClass" name="ObjectY" eSuperTypes="#/0/ObjectX">
+		<eStructuralFeatures xsi:type="ecore:EAttribute" name="nameY" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+	  </eClassifiers>
+	  <eClassifiers xsi:type="ecore:EClass" name="ObjectR">
+		<eStructuralFeatures xsi:type="ecore:EAttribute" name="nameR" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+	  </eClassifiers>
+	  <eClassifiers xsi:type="ecore:EClass" name="ObjectS" eSuperTypes="#/0/ObjectR">
+		<eStructuralFeatures xsi:type="ecore:EAttribute" name="nameS" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+	  </eClassifiers>
+	</ecore:EPackage>
+</xmi:XMI>

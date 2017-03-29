@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<TypeB:ListElement xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:TypeB="http://www.eclipse.org/atl/atlTransformations/TypeB" nameListElement="List1">
+  <elements abstractBaseName="Name A: A1" nameElement="Name B: B1" type="B"/>
+  <elements xsi:type="TypeB:SubElement" abstractBaseName="Name A: A2" nameElement="Name B: B2" type="B"/>
+  <elements xsi:type="TypeB:SubElement" abstractBaseName="Name A: A3" nameElement="Name B: B3" type="B"/>
+  <elements xsi:type="TypeB:SubElement" abstractBaseName="Name A: A4" nameElement="Name B: B4" type="B"/>
+  <elements xsi:type="TypeB:SubElement" abstractBaseName="Name A: A5" nameElement="Name B: B5" type="B"/>
+  <elements abstractBaseName="Name A: A6" nameElement="Name D: D1" type="D"/>
+  <xyElements nameX="Name Object X: X1"/>
+  <xyElements xsi:type="TypeB:ElementY" nameX="Name Object X: X2" nameY="Name Object Y: Y1"/>
+  <xyElements xsi:type="TypeB:ElementY" nameX="Name Object X: X3" nameY="Name Object Y: Y2"/>
+  <xyElements nameX="Name Object X: X4"/>
+  <rsElements xsi:type="TypeB:ElementS" nameR="Name Object R: R1" nameS="Name Object S: S1"/>
+  <rsElements xsi:type="TypeB:ElementX" nameX="Name Object X (von Object R Element): R2"/>
+  <rsElements xsi:type="TypeB:ElementS" nameR="Name Object R: R3" nameS="Name Object S: S1"/>
+</TypeB:ListElement>

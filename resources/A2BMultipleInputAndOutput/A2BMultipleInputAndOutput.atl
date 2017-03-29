@@ -1,0 +1,52 @@
+module A2BMultipleInputAndOutput;
+create OUT1 : TypeC, OUT2 : TypeD from IN1 : TypeA, IN2 : TypeB, IN3 : TypeB;
+
+rule RuleAA {
+	from
+		s : TypeA!A
+	to
+		t : TypeD!A(
+			name <- 'OUT_' + s.nameA,
+			elms <- s.elms
+		),
+		u : TypeC!AElementName(
+			name <- s.nameA
+		),
+		v : TypeD!AElementName(
+			name <- s.nameA
+		)
+}
+
+rule RuleAB {
+	from
+		s : TypeA!B
+	to
+		t : TypeD!B(
+			name <- 'OUT_' + s.nameB,
+			elms <- s.elms
+		),
+		u : TypeC!BElementName(
+			name <- s.nameB
+		),
+		v : TypeD!BElementName(
+			name <- s.nameB
+		)
+}
+
+rule RuleBString {
+	from
+		s : TypeB!BStringElement
+	to
+		t : TypeC!CStringElement(
+			stringValue <- 'OUT_' + s.stringValue
+		)
+}
+
+rule RuleBDouble {
+	from
+		s : TypeB!BDoubleElement
+	to
+		t : TypeC!CDoubleElement(
+			doubleValue <- s.doubleValue
+		)
+}

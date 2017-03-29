@@ -1,0 +1,93 @@
+module TestTransformation;
+create OUT : Persons from IN : Families;
+
+
+helper context Families!Member def: booleanTypeOperations : String =
+	if not self.familyFather.oclIsUndefined() and self.familyMother.oclIsUndefined() then
+		self.familyFather.lastName
+	else
+		if not self.familyMother.oclIsUndefined() or self.familyFather.oclIsUndefined() then
+			self.familyMother.lastName
+		else
+			if not self.familySon.oclIsUndefined() xor self.familyDaughter.oclIsUndefined() then
+				self.familySon.lastName
+			else
+				if self.familyDaughter.oclIsUndefined().implies(self.familySon.oclIsUndefined()) then
+					self.familyDaughter.lastName
+				else
+					self.familySon.lastName
+			endif
+		endif
+	endif;
+
+
+helper context Families!Member def: numberOperations() : Real =
+	if not self.familyMother.oclIsUndefined() then
+		5 + 1 - 3 * (12.4 / 2.0)
+	else
+		if not self.familyDaughter.oclIsUndefined() then
+			(5.max(6)) + (3.min(1))
+		else
+			(4-()).abs()
+	endif;
+
+
+helper context Families!Member def: sizeAndCountOperations() : Integer =
+	if self.familyDaughter.daughters.includes(self) then
+		self.familyDaughter.daughters.count(self)
+	else
+		if self.familySon.daughters.excludes(self) then
+			self.familyMother.daughters.size()
+		else
+			1
+		endif
+	endif;
+	
+helper context Families!Member def: testHelperMitParam(name : String, value : Families!Member) : String =
+	self.firstName;
+	
+helper context Families!Member def: isFemale() : Boolean =
+	if not self.familyMother.oclIsUndefined() then
+		true
+	else
+		if not self.familyDaughter.oclIsUndefined() then
+			true
+		else
+			false
+		endif
+	endif;
+	
+	
+helper context Families!Member def: familyName : String =
+	if not self.familyFather.oclIsUndefined() then
+		self.familyFather.lastName
+	else
+		if not self.familyMother.oclIsUndefined() then
+			self.familyMother.lastName
+		else
+			if not self.familySon.oclIsUndefined() then
+				self.familySon.lastName
+			else
+				self.familyDaughter.lastName
+			endif
+		endif
+	endif;
+	
+	
+rule Member2Male {
+	from
+		s : Families!Member (not s.isFemale())
+	to
+		t : Persons!Male (
+			fullName <- s.firstName + ' ' + s.familyName	
+		)
+}
+
+rule Member2Female {
+	from
+		s : Families!Member (s.isFemale())
+	to
+		t : Persons!Female (
+			fullName <- s.firstName + ' ' + s.familyName	
+		)
+}

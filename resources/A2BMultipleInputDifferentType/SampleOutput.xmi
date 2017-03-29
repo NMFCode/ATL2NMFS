@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:tpB="platform:/resource/A2BMultipleInputDifferentType/Metamodel/TypeB.ecore">
+  <tpB:A name="OUT_A1">
+    <elms name="OUT_B1"/>
+    <elms name="OUT_B2"/>
+  </tpB:A>
+  <tpB:A name="OUT_A2">
+    <elms name="OUT_B3"/>
+    <elms name="OUT_B4"/>
+    <elms name="OUT_B5"/>
+  </tpB:A>
+  <tpB:A name="OUT_A3"/>
+  <tpB:C name="OUT_C1"/>
+  <tpB:C name="OUT_C2"/>
+  <tpB:C name="OUT_C3"/>
+</xmi:XMI>

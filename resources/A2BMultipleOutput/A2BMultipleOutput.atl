@@ -1,0 +1,23 @@
+module A2BMultipleOutput;
+create OUT1 : TypeB, OUT2 : TypeC from IN1 : TypeA;
+
+rule RuleA {
+	from
+		s : TypeA!A
+	to
+		t : TypeB!A(
+			name <- 'OUT_' + s.nameA
+		),
+		u : TypeC!CElement(
+			elementName <- 'OUT_' + s.nameA
+		)
+}
+
+rule RuleB {
+	from
+		s : TypeA!B
+	to
+		t : TypeC!CElement(
+			elementName <- 'OUT_' + s.nameB
+		)
+}

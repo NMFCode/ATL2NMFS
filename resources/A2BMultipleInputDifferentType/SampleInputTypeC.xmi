@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="ASCII"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:tpC="platform:/resource/A2BMultipleInputDifferentType/Metamodel/TypeC.ecore">
+	<tpC:CElement elementName="C1"/>
+	<tpC:CElement elementName="C2"/>
+	<tpC:CElement elementName="C3"/>
+</xmi:XMI>
