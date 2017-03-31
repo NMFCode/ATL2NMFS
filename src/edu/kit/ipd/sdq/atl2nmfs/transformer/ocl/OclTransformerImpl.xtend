@@ -2,28 +2,13 @@ package edu.kit.ipd.sdq.atl2nmfs.transformer.ocl
 
 import com.google.inject.Inject
 import org.eclipse.emf.common.util.EList
-import org.eclipse.m2m.atl.common.OCL.BooleanExp
-import org.eclipse.m2m.atl.common.OCL.BooleanType
-import org.eclipse.m2m.atl.common.OCL.EnumLiteralExp
-import org.eclipse.m2m.atl.common.OCL.IfExp
-import org.eclipse.m2m.atl.common.OCL.IntegerExp
-import org.eclipse.m2m.atl.common.OCL.IntegerType
-import org.eclipse.m2m.atl.common.OCL.IteratorExp
-import org.eclipse.m2m.atl.common.OCL.NavigationOrAttributeCallExp
-import org.eclipse.m2m.atl.common.OCL.OclExpression
-import org.eclipse.m2m.atl.common.OCL.OclModel
-import org.eclipse.m2m.atl.common.OCL.OclModelElement
-import org.eclipse.m2m.atl.common.OCL.OperationCallExp
-import org.eclipse.m2m.atl.common.OCL.OperatorCallExp
-import org.eclipse.m2m.atl.common.OCL.RealExp
-import org.eclipse.m2m.atl.common.OCL.RealType
-import org.eclipse.m2m.atl.common.OCL.StringExp
-import org.eclipse.m2m.atl.common.OCL.StringType
-import org.eclipse.m2m.atl.common.OCL.VariableExp
+import org.eclipse.m2m.atl.common.OCL.*
 import edu.kit.ipd.sdq.atl2nmfs.helper.infos.PossibleReturnTypeInfo
 import edu.kit.ipd.sdq.atl2nmfs.helper.Atl2NmfSHelper
 import org.apache.commons.lang.NotImplementedException
 import org.apache.commons.lang.WordUtils
+import org.eclipse.m2m.atl.common.OCL.SequenceType
+import org.eclipse.m2m.atl.common.OCL.MapType
 
 /**
  * The OclTransformerImpl Class.
@@ -61,18 +46,18 @@ class OclTransformerImpl implements OclTransformer {
 	/* (non-Javadoc)
 	 * @see edu.kit.ipd.sdq.atl2nmfs.transformer.ocl.OclTransformer#transformExpression
 	 */
-	override String transformExpression(OclExpression expression) {
+	override String transformExpression(OclExpression expression, OclType type) {
 		// in this expression are no ambiguous calls so we don't need the possible type to solve ambiguity
 		this.possibleReturnTypeInfo = null;
 		this.handleCallToLazyRule = false;
 
-		return transform(expression);
+		return transform(expression, type);
 	}
 
 	/* (non-Javadoc)
 	 * @see edu.kit.ipd.sdq.atl2nmfs.transformer.ocl.OclTransformer#transformExpressionWithAmbiguousCall
 	 */
-	override String transformExpressionWithAmbiguousCall(OclExpression expression,
+	override String transformExpressionWithAmbiguousCall(OclExpression expression, OclType type,
 		PossibleReturnTypeInfo possibleReturnTypeInfo) {
 		// we need this function to cast a part of the expression to allow access to a property
 		// which is only availably from a sub type. Since there could be multiple possible types
@@ -80,7 +65,7 @@ class OclTransformerImpl implements OclTransformer {
 		this.possibleReturnTypeInfo = possibleReturnTypeInfo;
 		this.handleCallToLazyRule = false;
 
-		return transform(expression);
+		return transform(expression, type);
 	}
 
 	/**
@@ -90,10 +75,39 @@ class OclTransformerImpl implements OclTransformer {
 	 *            the OCL expression
 	 * @return the transformed string
 	 */
-	def private dispatch String transform(OclExpression expression) {
+	def private dispatch String transform(OclExpression expression, OclType type) {
 		// is called when no specific dispatch function for the expression type is implemented
 		throw new NotImplementedException("No dispatch function for the type " + expression.class.name +
 			" implemented");
+	}
+	
+	def private dispatch String transform(MapExp map, OclType type) {
+		var mapType = type as MapType;
+		return '''Dictionary<«mapType.keyType.name», «mapType.valueType.name»> {
+			«FOR element : map.elements SEPARATOR ","»
+				{ «transform(element.key, mapType.keyType)», «transform(element.value, mapType.valueType)» }
+			«ENDFOR»
+		}''';
+	}
+	
+	def private dispatch String transform(SetExp setExp, OclType type) {
+		return "// FIXME!";
+	}
+	
+	def private dispatch String transform(OclUndefinedExp undef, OclType type) {
+		return "null";
+	}
+	
+	def private dispatch String transform(MapType mapType, OclType type) {
+		return "IDictionary<" + mapType.keyType.name + ", " + mapType.valueType.name + ">";
+	}
+	
+	def private dispatch String transform(SequenceType sequenceType, OclType type) {
+		var elementType = "ModelElement";
+		if (sequenceType.elementType != null) {
+			elementType = sequenceType.elementType.name;
+		}
+		return "IEnumerableExpression<I" + elementType + ">";
 	}
 
 	/**
@@ -103,7 +117,7 @@ class OclTransformerImpl implements OclTransformer {
 	 *            the void expression
 	 * @return the transformed string
 	 */
-	def private dispatch String transform(Void v) {
+	def private dispatch String transform(Void v, OclType type) {
 		// called if the parameter is null
 		return "";
 	}
@@ -115,8 +129,8 @@ class OclTransformerImpl implements OclTransformer {
 	 *            the OCL expressions
 	 * @return the transformed string
 	 */
-	def private dispatch String transform(EList<OclExpression> expressions) {
-		return '''«FOR expression : expressions SEPARATOR ", "»«transform(expression)»«ENDFOR»'''
+	def private dispatch String transform(EList<OclExpression> expressions, OclType type) {
+		return '''«FOR expression : expressions SEPARATOR ", "»«transform(expression, type)»«ENDFOR»'''
 	}
 
 	/**
@@ -126,9 +140,9 @@ class OclTransformerImpl implements OclTransformer {
 	 *            the OCL expression
 	 * @return the transformed string
 	 */
-	def private dispatch String transform(OperatorCallExp expression) {
-		var transformedSource = transform(expression.source);
-		var transformedArgument = transform(expression.arguments);
+	def private dispatch String transform(OperatorCallExp expression, OclType type) {
+		var transformedSource = transform(expression.source, null);
+		var transformedArgument = transform(expression.arguments, null);
 
 		return oclOperatorTransformer.transform(expression, transformedSource, transformedArgument);
 	}
@@ -140,10 +154,10 @@ class OclTransformerImpl implements OclTransformer {
 	 *            the operation call expression
 	 * @return the transformed string
 	 */
-	def private dispatch String transform(OperationCallExp expression) {
+	def private dispatch String transform(OperationCallExp expression, OclType type) {
 		// this function can also be used for the CollectionOperationCallExp type which is a subtype of the OperationCallExp type
-		var transformedSource = transform(expression.source);
-		var transformedArgument = transform(expression.arguments);
+		var transformedSource = transform(expression.source, null);
+		var transformedArgument = transform(expression.arguments, null);
 
 		if (atl2NmfSHelper.isLazyRule(expression.operationName)) {
 			// we set this flag to signalize that iterator expressions can be simplified
@@ -163,10 +177,10 @@ class OclTransformerImpl implements OclTransformer {
 	 *            the if expression
 	 * @return the transformed string
 	 */
-	def private dispatch String transform(IfExp expression) {
-		var transformedCondition = transform(expression.condition);
-		var transformedThenExpression = transform(expression.thenExpression);
-		var transformedElseExpression = transform(expression.elseExpression);
+	def private dispatch String transform(IfExp expression, OclType type) {
+		var transformedCondition = transform(expression.condition, null);
+		var transformedThenExpression = transform(expression.thenExpression, type);
+		var transformedElseExpression = transform(expression.elseExpression, type);
 
 		return '''
 		(«transformedCondition») ? 
@@ -180,9 +194,9 @@ class OclTransformerImpl implements OclTransformer {
 	 *            the iterator expression
 	 * @return the transformed string
 	 */
-	def private dispatch String transform(IteratorExp expression) {
-		var transformedSource = transform(expression.source);
-		var transformedBody = transform(expression.body);
+	def private dispatch String transform(IteratorExp expression, OclType type) {
+		var transformedSource = transform(expression.source, null);
+		var transformedBody = transform(expression.body, null);
 
 		var transformedExpression = oclIteratorTransformer.transform(expression, transformedSource, transformedBody,
 			expression.body, handleCallToLazyRule);
@@ -203,9 +217,9 @@ class OclTransformerImpl implements OclTransformer {
 	 *            the navigation or attribute call expression
 	 * @return the transformed string
 	 */
-	def private dispatch String transform(NavigationOrAttributeCallExp expression) {
+	def private dispatch String transform(NavigationOrAttributeCallExp expression, OclType type) {
 		var transformedPropertyName = WordUtils.capitalize(expression.name);
-		var transformedSource = transform(expression.source);
+		var transformedSource = transform(expression.source, null);
 
 		if (atl2NmfSHelper.isAttributeHelper(expression.name)) {
 			var attributeHelperInfo = atl2NmfSHelper.getAttributeHelperInfo(expression.name);
@@ -246,7 +260,7 @@ class OclTransformerImpl implements OclTransformer {
 	 *            the variable expression
 	 * @return the transformed string
 	 */
-	def private dispatch String transform(VariableExp expression) {
+	def private dispatch String transform(VariableExp expression, OclType type) {
 		return expression.referredVariable.varName;
 	}
 
@@ -257,7 +271,7 @@ class OclTransformerImpl implements OclTransformer {
 	 *            the boolean expression
 	 * @return the transformed string
 	 */
-	def private dispatch String transform(BooleanExp expression) {
+	def private dispatch String transform(BooleanExp expression, OclType type) {
 		return expression.isBooleanSymbol.toString;
 	}
 
@@ -268,7 +282,7 @@ class OclTransformerImpl implements OclTransformer {
 	 *            the string expression
 	 * @return the transformed string
 	 */
-	def private dispatch String transform(StringExp expression) {
+	def private dispatch String transform(StringExp expression, OclType type) {
 		return '''"«expression.stringSymbol»"''';
 	}
 
@@ -279,7 +293,7 @@ class OclTransformerImpl implements OclTransformer {
 	 *            the enum literal expression
 	 * @return the transformed string
 	 */
-	def private dispatch String transform(EnumLiteralExp expression) {
+	def private dispatch String transform(EnumLiteralExp expression, OclType type) {
 		return expression.name;
 	}
 
@@ -290,7 +304,7 @@ class OclTransformerImpl implements OclTransformer {
 	 *            the integer expression
 	 * @return the transformed string
 	 */
-	def private dispatch String transform(IntegerExp expression) {
+	def private dispatch String transform(IntegerExp expression, OclType type) {
 		return expression.integerSymbol.toString;
 	}
 
@@ -301,7 +315,7 @@ class OclTransformerImpl implements OclTransformer {
 	 *            the real expression
 	 * @return the transformed string
 	 */
-	def private dispatch String transform(RealExp expression) {
+	def private dispatch String transform(RealExp expression, OclType type) {
 		return expression.realSymbol.toString;
 	}
 
@@ -312,9 +326,9 @@ class OclTransformerImpl implements OclTransformer {
 	 *            the OCL model element expression
 	 * @return the transformed string
 	 */
-	def private dispatch String transform(OclModelElement expression) {
+	def private dispatch String transform(OclModelElement expression, OclType type) {
 		// the name of the metamodel is used by Ecore2Code as inner namespace name for the code of the metamodel
-		var metamodel = transform(expression.model);
+		var metamodel = transform(expression.model, null);
 
 		// we use the generated interface type of the model element
 		return '''«metamodel».I«expression.name»''';
@@ -327,7 +341,7 @@ class OclTransformerImpl implements OclTransformer {
 	 *            the OCL model expression
 	 * @return the transformed string
 	 */
-	def private dispatch String transform(OclModel expression) {
+	def private dispatch String transform(OclModel expression, OclType type) {
 		return expression.name;
 	}
 
@@ -338,7 +352,7 @@ class OclTransformerImpl implements OclTransformer {
 	 *            the boolean type expression
 	 * @return the transformed string
 	 */
-	def private dispatch String transform(BooleanType expression) {
+	def private dispatch String transform(BooleanType expression, OclType type) {
 		return "bool";
 	}
 
@@ -349,7 +363,7 @@ class OclTransformerImpl implements OclTransformer {
 	 *            the integer type expression
 	 * @return the transformed string
 	 */
-	def private dispatch String transform(IntegerType expression) {
+	def private dispatch String transform(IntegerType expression, OclType type) {
 		return "int";
 	}
 
@@ -360,7 +374,7 @@ class OclTransformerImpl implements OclTransformer {
 	 *            the real type expression
 	 * @return the transformed string
 	 */
-	def private dispatch String transform(RealType expression) {
+	def private dispatch String transform(RealType expression, OclType type) {
 		return "double";
 	}
 
@@ -371,7 +385,7 @@ class OclTransformerImpl implements OclTransformer {
 	 *            the string type expression
 	 * @return the transformed string
 	 */
-	def private dispatch String transform(StringType expression) {
+	def private dispatch String transform(StringType expression, OclType type) {
 		return "string";
 	}
 }

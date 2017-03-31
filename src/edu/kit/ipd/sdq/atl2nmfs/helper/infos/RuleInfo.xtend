@@ -71,7 +71,7 @@ class RuleInfo {
 
 		this.inputTypeName = inputPatternElement.type.name;
 		this.inputTypeMetamodelName = inputOclModelElement.model.name;
-		this.transformedInputTypeName = atl2NmfSHelper.transformExpression(inputPatternElement.type);
+		this.transformedInputTypeName = atl2NmfSHelper.transformExpression(inputPatternElement.type, null);
 		this.inputVariableName = inputPatternElement.varName;
 
 		// create the rule info for the default output pattern element (the first output pattern element)
@@ -80,7 +80,7 @@ class RuleInfo {
 
 		this.outputTypeName = outputPatternElement.type.name;
 		this.outputTypeMetamodelName = outputOclModelElement.model.name;
-		this.transformedOutputTypeName = atl2NmfSHelper.transformExpression(outputPatternElement.type);
+		this.transformedOutputTypeName = atl2NmfSHelper.transformExpression(outputPatternElement.type, null);
 		this.outputVariableName = outputPatternElement.varName;
 
 		// check if the rule has a filter
@@ -150,7 +150,7 @@ class RuleInfo {
 		var additionalOutputOclModelElement = additionalOutputPatternElement.type as OclModelElement;
 		this.outputTypeMetamodelName = additionalOutputOclModelElement.model.name;
 		this.outputTypeName = additionalOutputPatternElement.type.name;
-		this.transformedOutputTypeName = atl2NmfSHelper.transformExpression(additionalOutputPatternElement.type);
+		this.transformedOutputTypeName = atl2NmfSHelper.transformExpression(additionalOutputPatternElement.type, null);
 		this.outputVariableName = additionalOutputPatternElement.varName;
 
 		this.bindingInfos = new ArrayList<BindingInfo>();
@@ -220,7 +220,7 @@ class RuleInfo {
 			if (!isDefaultRule) {
 				transformedFilterExpression = parentRuleInfo.transformedFilterExpression;
 			} else {
-				transformedFilterExpression = atl2NmfSHelper.transformExpression(filterExpression);
+				transformedFilterExpression = atl2NmfSHelper.transformExpression(filterExpression, null);
 			}
 		}
 

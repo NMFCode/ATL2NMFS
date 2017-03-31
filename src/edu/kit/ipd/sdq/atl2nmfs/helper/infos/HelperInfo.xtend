@@ -9,6 +9,8 @@ import org.eclipse.m2m.atl.common.OCL.OclModelElement
 import org.eclipse.m2m.atl.common.OCL.Operation
 import edu.kit.ipd.sdq.atl2nmfs.helper.Atl2NmfSHelper
 import org.apache.commons.lang.WordUtils
+import org.eclipse.m2m.atl.common.OCL.OclType
+import org.eclipse.m2m.atl.common.OCL.SequenceType
 
 /**
  * The HelperType Enum.
@@ -34,7 +36,9 @@ class HelperInfo {
 	private final String returnTypeName;
 	private final String returnTypeMetamodelName;
 	private final Boolean isReturnTypePrimitive;
+	private final Boolean isReturnTypeSequence;
 	private final OclExpression expression;
+	private final OclType type;
 	private String transformedExpression;
 
 	private final ArrayList<ParameterInfo> parameterInfos;
@@ -57,7 +61,7 @@ class HelperInfo {
 
 		this.hasContext = contextDefinition != null;
 		if (hasContext) {
-			this.transformedContext = atl2NmfSHelper.transformExpression(contextDefinition.context_);
+			this.transformedContext = atl2NmfSHelper.transformExpression(contextDefinition.context_, null);
 		} 
 		else {
 			// if the helper has no context declared then it has a global context and must be called with 'thisModule'
@@ -70,9 +74,18 @@ class HelperInfo {
 			this.helperType = HelperType.ATTRIBUTE;
 			this.name = feature.name;
 			this.transformedName = WordUtils.capitalize(name);
+			
+			var type = feature.type;
+			var isCollection = false;
+			if (type instanceof SequenceType) {
+				type = (type as SequenceType).elementType;
+				isCollection = true;
+			}
+			
+			this.isReturnTypeSequence = isCollection;
 
-			if (feature.type instanceof OclModelElement) {
-				var oclModelElement = feature.type as OclModelElement;
+			if (type instanceof OclModelElement) {
+				var oclModelElement = type as OclModelElement;
 
 				this.returnTypeMetamodelName = oclModelElement.model.name;
 				this.returnTypeName = oclModelElement.name;
@@ -80,23 +93,33 @@ class HelperInfo {
 			} 
 			else {
 				this.returnTypeMetamodelName = null;
-				this.returnTypeName = atl2NmfSHelper.transformExpression(feature.type);
+				this.returnTypeName = atl2NmfSHelper.transformExpression(feature.type, null);
 				this.isReturnTypePrimitive = true;
 			}
 
-			this.transformedReturnTypeName = atl2NmfSHelper.transformExpression(feature.type);
+			this.transformedReturnTypeName = atl2NmfSHelper.transformExpression(feature.type, null);
 
 			// we have to delay the transformation since not all ATL rules and helpers are analyzed and registered yet
 			this.expression = feature.initExpression;
+			this.type = feature.type;
 		} 
 		else {
 			var operation = feature as Operation
 			this.helperType = HelperType.FUNCTIONAL;
 			this.name = operation.name;
 			this.transformedName = WordUtils.capitalize(name);
+			
+			var type = operation.returnType;
+			var isCollection = false;
+			if (type instanceof SequenceType) {
+				type = (type as SequenceType).elementType;
+				isCollection = true;
+			}
+			
+			this.isReturnTypeSequence = isCollection;
 
-			if (operation.returnType instanceof OclModelElement) {
-				var oclModelElement = operation.returnType as OclModelElement;
+			if (type instanceof OclModelElement) {
+				var oclModelElement = type as OclModelElement;
 
 				this.returnTypeMetamodelName = oclModelElement.model.name;
 				this.returnTypeName = oclModelElement.name;
@@ -104,17 +127,18 @@ class HelperInfo {
 			} 
 			else {
 				this.returnTypeMetamodelName = null;
-				this.returnTypeName = atl2NmfSHelper.transformExpression(operation.returnType);
+				this.returnTypeName = atl2NmfSHelper.transformExpression(operation.returnType, null);
 				this.isReturnTypePrimitive = true;
 			}
 
-			this.transformedReturnTypeName = atl2NmfSHelper.transformExpression(operation.returnType);
+			this.transformedReturnTypeName = atl2NmfSHelper.transformExpression(operation.returnType, null);
 
 			// we have to delay the transformation since not all ATL rules and helpers are analyzed and registered yet
 			this.expression = operation.body;
+			this.type = operation.returnType;
 
 			for (parameter : operation.parameters) {
-				var transformedTypeName = atl2NmfSHelper.transformExpression(parameter.type);
+				var transformedTypeName = atl2NmfSHelper.transformExpression(parameter.type, null);
 				var parameterInfo = new ParameterInfo(parameter.varName, transformedTypeName);
 				parameterInfos.add(parameterInfo)
 			}
@@ -155,7 +179,7 @@ class HelperInfo {
 	 */
 	def String getTransformedExpression() {
 		if (transformedExpression == null) {
-			transformedExpression = atl2NmfSHelper.transformExpression(expression);
+			transformedExpression = atl2NmfSHelper.transformExpression(expression, type);
 		}
 
 		return transformedExpression;

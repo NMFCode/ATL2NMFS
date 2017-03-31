@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.impl.EReferenceImpl
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl
+import org.eclipse.emf.ecore.EEnum
 
 /**
  * The EcoreAnalyzerImpl Class.
@@ -49,10 +50,10 @@ class EcoreAnalyzerImpl implements EcoreAnalyzer {
 		mainPackage = untypedPackage as EPackage
 
 		// the name of the metamodel used in the atl transformation must be the same name of the main ePackage used in the metamodel
-		if (!mainPackage.name.equals(metamodelName))
+		/*if (!mainPackage.name.equals(metamodelName))
 			throw new IllegalArgumentException("No Package with the name " + metamodelName +
 				" found. Please make sure that the package name in the Ecore metamodel is the same name as the metamodel name in the ATL Transformation.");
-
+*/
 		// analyze ecore metamodel and initialize type hierarchy
 		typeInfos = new ArrayList<TypeInfo>();
 		initializeTypeHierarchy();
@@ -62,18 +63,27 @@ class EcoreAnalyzerImpl implements EcoreAnalyzer {
 	 * Initialize the type hierarchy.
 	 */
 	def private void initializeTypeHierarchy() {
+		initializePackage(mainPackage);
+	}
+	
+	def private void initializePackage(EPackage pack) {
 		// iterate over each classifier and create the type hierarchy
-		for (eClassifier : mainPackage.getEClassifiers) {
+		for (eClassifier : pack.getEClassifiers) {
 			if (eClassifier instanceof EClass) {
 				var eClass = eClassifier as EClass;
 
 				// a type info can already be created for the classifier if it was a super type of a classifier which was already handled
 				var typeInfo = getOrCreateTypeInfo(eClass.name);
 				initializeSuperAndSubTypeInfos(typeInfo, eClass);
+			} else if (eClassifier instanceof EEnum) {
+				//skip enum
 			} else {
 				throw new NotImplementedException(
 					"During the analysis of the type hierarchy are only classifier with the type EClassImpl supported");
 			}
+		}
+		for (subPack : pack.ESubpackages) {
+			initializePackage(subPack);
 		}
 	}
 
@@ -89,9 +99,10 @@ class EcoreAnalyzerImpl implements EcoreAnalyzer {
 		// we don't have to call this function iteratively because the EAllSuperTypes List contains already the super types of the super types
 		for (superType : eClass.getEAllSuperTypes) {
 			var superTypeInfo = getOrCreateTypeInfo(superType.name);
-
-			typeInfo.superTypeInfos.add(superTypeInfo);
-			superTypeInfo.subTypeInfos.add(typeInfo);
+			if (superTypeInfo != null) {
+				typeInfo.superTypeInfos.add(superTypeInfo);
+				superTypeInfo.subTypeInfos.add(typeInfo);
+			}
 		}
 	}
 
@@ -103,6 +114,8 @@ class EcoreAnalyzerImpl implements EcoreAnalyzer {
 	 * @return the type info
 	 */
 	def private TypeInfo getOrCreateTypeInfo(String typeName) {
+		if (typeName == null) return null;
+				
 		var typeInfo = typeInfos.findFirst[it.name == typeName];
 
 		if (typeInfo == null) {
@@ -117,11 +130,9 @@ class EcoreAnalyzerImpl implements EcoreAnalyzer {
 	 * @see edu.kit.ipd.sdq.atl2nmfs.helper.EcoreAnalyzer#getTypeInfo
 	 */
 	override TypeInfo getTypeInfo(String typeName) {
-		var typeInfo = typeInfos.findFirst[it.name.equals(typeName)];
-
-		if (typeInfo == null) {
-			throw new IllegalArgumentException("No type info for the type '" + typeName + "' could be found.")
-		}
+		if (typeName == null) return null;
+		
+		var typeInfo = typeInfos.findFirst[typeName.equals(it.name)];
 
 		return typeInfo;
 	}
@@ -148,7 +159,7 @@ class EcoreAnalyzerImpl implements EcoreAnalyzer {
 		var isTypeCollection = isFeaturesTypeACollection(classifierName, featureName);
 
 		if (isTypeComplex) {
-			returnTypeInfo = new ReturnTypeInfo(metamodelName, typeName);
+			returnTypeInfo = new ReturnTypeInfo(metamodelName, typeName, isTypeComplex);
 		} 
 		else {
 			// the return type is primitive
@@ -286,10 +297,7 @@ class EcoreAnalyzerImpl implements EcoreAnalyzer {
 	 * @return the feature
 	 */
 	def private EStructuralFeature getFeature(String classifierName, String featureName) {
-		var eClassifier = mainPackage.getEClassifiers.findFirst [
-			it.name.equals(classifierName);
-		]
-		var eClass = eClassifier as EClassImpl;
+		var eClass = findClass(mainPackage, classifierName);
 
 		// the structural feature list contains also all inherited structural features from super types
 		var structuralFeature = eClass.getEAllStructuralFeatures.findFirst [
@@ -297,5 +305,21 @@ class EcoreAnalyzerImpl implements EcoreAnalyzer {
 		]
 
 		return structuralFeature;
+	}
+	
+	def private EClassImpl findClass(EPackage pack, String className) {
+		var classifier = pack.getEClassifiers.findFirst [
+			it.name.equals(className);
+		]
+		if (classifier != null) {
+			return classifier as EClassImpl;
+		}
+		for (subPack : pack.ESubpackages) {
+			var classInSubPackage = findClass(subPack, className);
+			if (classInSubPackage != null) {
+				return classInSubPackage;
+			}
+		}
+		return null;
 	}
 }

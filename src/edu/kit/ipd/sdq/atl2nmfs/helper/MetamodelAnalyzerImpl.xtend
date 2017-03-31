@@ -96,6 +96,18 @@ class MetamodelAnalyzerImpl implements MetamodelAnalyzer {
 		val firstTypeInfo = getTypeInfoFromInputMetamodel(firstMetamodelName, firstTypeName);
 		val secondTypeInfo = getTypeInfoFromInputMetamodel(secondMetamodelName, secondTypeName);
 
+		return findLowest(firstTypeInfo, secondTypeInfo, firstTypeName, secondTypeName);
+	}
+	
+	override TypeInfo findLowestCommonSuperTypeInfoInOutputMetamodel(String firstMetamodelName, String firstTypeName,
+		String secondMetamodelName, String secondTypeName) {
+		val firstTypeInfo = getTypeInfoFromOutputMetamodel(firstMetamodelName, firstTypeName);
+		val secondTypeInfo = getTypeInfoFromOutputMetamodel(secondMetamodelName, secondTypeName);
+
+		return findLowest(firstTypeInfo, secondTypeInfo, firstTypeName, secondTypeName);
+	}
+	
+	def TypeInfo findLowest(TypeInfo firstTypeInfo, TypeInfo secondTypeInfo, String firstTypeName, String secondTypeName) {
 		if (firstTypeInfo == null) {
 			throw new IllegalArgumentException(
 				"The lowest common super type could not be determined because the first type '" + firstTypeName +
@@ -227,6 +239,8 @@ class MetamodelAnalyzerImpl implements MetamodelAnalyzer {
 	 */
 	override TypeInfo getTypeInfoFromInputMetamodel(String metamodelName, String typeName) {
 		var metamodelInfo = inputMetamodelInfos.findFirst[it.name.equals(metamodelName)];
+		if (metamodelInfo == null) metamodelInfo = outputMetamodelInfos.findFirst[it.name.equals(metamodelName)];
+		if (metamodelInfo == null) return null;
 		return metamodelInfo.ecoreAnalyzer.getTypeInfo(typeName);
 	}
 
@@ -235,6 +249,8 @@ class MetamodelAnalyzerImpl implements MetamodelAnalyzer {
 	 */
 	override TypeInfo getTypeInfoFromOutputMetamodel(String metamodelName, String typeName) {
 		var metamodelInfo = outputMetamodelInfos.findFirst[it.name.equals(metamodelName)];
+		if (metamodelInfo == null) metamodelInfo = inputMetamodelInfos.findFirst[it.name.equals(metamodelName)];
+		if (metamodelInfo == null) return null;
 		return metamodelInfo.ecoreAnalyzer.getTypeInfo(typeName);
 	}
 

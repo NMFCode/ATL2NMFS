@@ -128,9 +128,13 @@ class BindingTransformerImpl implements BindingTransformer {
 		if (!ruleInputReturnTypeInfo.isAmbiguous && !ruleOutputReturnTypeInfo.isAmbiguous &&
 			ruleInputReturnTypeInfo.typePrimitive != ruleOutputReturnTypeInfo.typePrimitive) {
 			throw new IllegalArgumentException(
-				"The Binding can't be resolved since one side of the Binding has a primitive type and the other a complex type. Rule name: " +
+				"The Binding " + bindingInfo.outputPropertyName + " at location " + bindingInfo.location + " can't be resolved since one side of the Binding has a primitive type and the other a complex type. Rule name: " +
 					containingRuleInfo.name + "; Output classifier: " + bindingInfo.outputTypeName +
 					"; Output element: " + bindingInfo.getOutputPropertyName);
+		}
+		
+		if (ruleOutputReturnTypeInfo.isAmbiguous) {
+			throw new Exception("The binding  " + bindingInfo.outputPropertyName + " at location " + bindingInfo.location + " is ambiguous.");
 		}
 
 		if (ruleOutputReturnTypeInfo.typePrimitive) {
@@ -192,13 +196,18 @@ class BindingTransformerImpl implements BindingTransformer {
 			];
 		} 
 		else {
-			// if it is not the default rule it contains no additional output element rule because itself is one. So we have to 
-			// use the parent rule which contains all the rule infos which are created for the different atl output elements 
-			requiredRuleInfo = containingRuleInfo.getParentRuleInfo.getAdditionalOutputPatternElementRuleInfos.
-				findFirst [ additionalOutputPatternElementRuleInfo |
-					additionalOutputPatternElementRuleInfo.outputVariableName.equals(
-						ruleInputReturnTypeInfo.getNameOfTheReferencedOutputPatternElement)
-				];
+			var parentRule = containingRuleInfo.parentRuleInfo;
+			if (ruleInputReturnTypeInfo.nameOfTheReferencedOutputPatternElement.equals(parentRule.outputVariableName)) {
+				requiredRuleInfo = parentRule;
+			} else {
+				// if it is not the default rule it contains no additional output element rule because itself is one. So we have to 
+				// use the parent rule which contains all the rule infos which are created for the different atl output elements 
+				requiredRuleInfo = containingRuleInfo.getParentRuleInfo.getAdditionalOutputPatternElementRuleInfos.
+					findFirst [ additionalOutputPatternElementRuleInfo |
+						additionalOutputPatternElementRuleInfo.outputVariableName.equals(
+							ruleInputReturnTypeInfo.getNameOfTheReferencedOutputPatternElement)
+					];
+			}
 		}
 
 		if (requiredRuleInfo == null) {
@@ -237,7 +246,7 @@ class BindingTransformerImpl implements BindingTransformer {
 			// we can't use the default transformed expression in the binding info. We have to consider the possible type during
 			// the transformation of the OCL expression to solve ambiguous property navigations with a cast to the possible type
 			val transformedExpression = atl2NmfSHelper.
-				transformExpressionWithAmbiguousCall(bindingInfo.oclExpression, possibleType);
+				transformExpressionWithAmbiguousCall(bindingInfo.oclExpression, null, possibleType);
 
 			var requiredRules = atl2NmfSHelper.getRequiredRuleInfos(possibleType.metamodelName,
 				possibleType.typeName, containingRuleInfo.outputTypeMetamodelName,
@@ -323,6 +332,12 @@ class BindingTransformerImpl implements BindingTransformer {
 		BindingInfo bindingInfo, RuleInfo containingRuleInfo) {
 		val ruleInputReturnTypeInfo = bindingInfo.inputReturnTypeInfo;
 		val ruleOutputReturnTypeInfo = bindingInfo.outputReturnTypeInfo;
+		
+		if (ruleInputReturnTypeInfo.metamodelName == ruleOutputReturnTypeInfo.metamodelName &&
+			ruleInputReturnTypeInfo.typeName == ruleOutputReturnTypeInfo.typeName) {
+			transformBindingPrimitiveType(bindingCode, bindingInfo, containingRuleInfo);
+			return;
+		}
 
 		var requiredRules = atl2NmfSHelper.getRequiredRuleInfos(ruleInputReturnTypeInfo.metamodelName,
 			ruleInputReturnTypeInfo.getTypeName, containingRuleInfo.outputTypeMetamodelName,

@@ -29,6 +29,9 @@ import org.eclipse.m2m.atl.common.OCL.StringType
 import org.eclipse.m2m.atl.common.OCL.VariableDeclaration
 import org.eclipse.m2m.atl.common.OCL.VariableExp
 import org.apache.commons.lang.StringUtils
+import org.eclipse.emf.ecore.impl.EClassImpl
+import org.eclipse.m2m.atl.common.OCL.SetExp
+import org.eclipse.m2m.atl.common.OCL.OclUndefinedExp
 
 /**
  * The OclReturnTypeAnalyzerImpl Class.
@@ -98,6 +101,17 @@ class OclReturnTypeAnalyzerImpl implements OclReturnTypeAnalyzer {
 		throw new NotImplementedException("No analyze dispatch function for the type " + expression.class.name +
 			" implemented");
 	}
+	
+	def private dispatch ReturnTypeInfo analyze(OclUndefinedExp undefined) {
+		return new ReturnTypeInfo();
+	}
+	
+	def private dispatch ReturnTypeInfo analyze(SetExp setExpression) {
+		if (setExpression.elements.size == 0) return null;
+		var inner = analyze(setExpression.elements.get(0));
+		inner.isTypeCollection = true;
+		return inner;
+	}
 
 	/**
 	 * The double dispatch function to analyze a Void expression.
@@ -165,6 +179,14 @@ class OclReturnTypeAnalyzerImpl implements OclReturnTypeAnalyzer {
 	def private dispatch ReturnTypeInfo analyze(IfExp expression) {
 		var thenExpressionReturnTypeInfo = analyze(expression.thenExpression);
 		var elseExpressionReturnTypeInfo = analyze(expression.elseExpression);
+		
+		if (expression.thenExpression instanceof OclUndefinedExp) {
+			return elseExpressionReturnTypeInfo;
+		}
+		
+		if (expression.elseExpression instanceof OclUndefinedExp) {
+			return thenExpressionReturnTypeInfo;
+		}
 
 		if (thenExpressionReturnTypeInfo.typePrimitive && elseExpressionReturnTypeInfo.typePrimitive) {
 			// the return type is primitive
@@ -199,7 +221,8 @@ class OclReturnTypeAnalyzerImpl implements OclReturnTypeAnalyzer {
 				returnTypeInfo = new ReturnTypeInfo();
 			} 
 			else {
-				returnTypeInfo = new ReturnTypeInfo(helperInfo.returnTypeMetamodelName, helperInfo.getReturnTypeName);
+				var isClass = atl2NmfSHelper.findClassifier(helperInfo.returnTypeMetamodelName, helperInfo.returnTypeName) != null;
+				returnTypeInfo = new ReturnTypeInfo(helperInfo.returnTypeMetamodelName, helperInfo.getReturnTypeName, isClass);
 			}
 		} // check if the called operation is a lazy or a unique lazy rule
 		else if (atl2NmfSHelper.isLazyRule(expression.operationName)) {
@@ -207,6 +230,10 @@ class OclReturnTypeAnalyzerImpl implements OclReturnTypeAnalyzer {
 			var argumentsReturnTypeInfo = analyze(expression.arguments);
 			returnTypeInfo = new ReturnTypeInfo(lazyRuleInfo, argumentsReturnTypeInfo);
 		} 
+		else if ("allInstances".equals(expression.operationName)) {
+			var classifier = expression.source as OclModelElement;
+			returnTypeInfo = new ReturnTypeInfo(classifier.model.name, classifier.name, true);
+		}
 		else {
 			// an OCL operation is called
 			// check if the return type of the operation is complex or not
@@ -243,7 +270,7 @@ class OclReturnTypeAnalyzerImpl implements OclReturnTypeAnalyzer {
 			if (expression.body instanceof OperationCallExp) {
 				var operationBodyExpression = expression.body as OperationCallExp;
 
-				if (operationBodyExpression.operationName.equals("oclIsKindOf")) {
+				if (operationBodyExpression.operationName.equals("oclIsKindOf") && operationBodyExpression.source instanceof VariableExp) {
 					var operationReturnTypeInfo = analyze(operationBodyExpression.arguments);
 					var sourceReturnTypeInfo = analyze(expression.source);
 
@@ -297,7 +324,8 @@ class OclReturnTypeAnalyzerImpl implements OclReturnTypeAnalyzer {
 				return new ReturnTypeInfo();
 			} 
 			else {
-				return new ReturnTypeInfo(helperInfo.getReturnTypeMetamodelName, helperInfo.getReturnTypeName)
+				var isClass = atl2NmfSHelper.findClassifier(helperInfo.returnTypeMetamodelName, helperInfo.returnTypeName) != null;
+				return new ReturnTypeInfo(helperInfo.returnTypeMetamodelName, helperInfo.returnTypeName, isClass)
 			}
 		}
 
@@ -335,9 +363,7 @@ class OclReturnTypeAnalyzerImpl implements OclReturnTypeAnalyzer {
 	 * @return the inferred return type info
 	 */
 	def private dispatch ReturnTypeInfo analyze(VariableDeclaration expression) {
-		// TODO: support variable declarations
-		throw new NotImplementedException(
-			"The dispatch function for the expression type 'VariableDeclaration' is not supported yet");
+		return analyze(expression.initExpression);
 	}
 
 	/**
@@ -451,7 +477,8 @@ class OclReturnTypeAnalyzerImpl implements OclReturnTypeAnalyzer {
 	 */
 	def private dispatch ReturnTypeInfo analyze(OclModelElement expression) {
 		var metamodelName = expression.model.name;
-		return new ReturnTypeInfo(metamodelName, expression.name);
+		var isClass = atl2NmfSHelper.findClassifier(metamodelName, expression.name) != null;
+		return new ReturnTypeInfo(metamodelName, expression.name, isClass);
 	}
 
 	/**

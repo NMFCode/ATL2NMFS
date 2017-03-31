@@ -39,6 +39,23 @@ interface MetamodelAnalyzer {
 	 */
 	def TypeInfo findLowestCommonSuperTypeInfoInInputMetamodel(String firstMetamodelName, String firstTypeName,
 		String secondMetamodelName, String secondTypeName);
+		
+		
+	/**
+	 * Find lowest common super type info in output metamodel.
+	 * 
+	 * @param firstMetamodelName
+	 *            the first metamodel name
+	 * @param firstTypeName
+	 *            the first type name
+	 * @param secondMetamodelName
+	 *            the second metamodel name
+	 * @param secondTypeName
+	 *            the second type name
+	 * @return the type info of the lowest common super type
+	 */
+	def TypeInfo findLowestCommonSuperTypeInfoInOutputMetamodel(String firstMetamodelName, String firstTypeName,
+		String secondMetamodelName, String secondTypeName);
 
 	/**
 	 * Get the required rule infos.

@@ -38,5 +38,7 @@ interface AtlTransformer {
 	 *            the project file name
 	 */
 	def void createCSharpCode(String outputPath, String projectFileName);
+	
+	def void createTransformationOnly(String outputPath);
 
 }

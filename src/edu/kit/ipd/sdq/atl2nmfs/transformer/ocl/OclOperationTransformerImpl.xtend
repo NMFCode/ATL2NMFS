@@ -6,6 +6,7 @@ import org.eclipse.m2m.atl.common.OCL.OclModelElement
 import org.eclipse.m2m.atl.common.OCL.OperationCallExp
 import edu.kit.ipd.sdq.atl2nmfs.helper.Atl2NmfSHelper
 import org.apache.commons.lang.NotImplementedException
+import edu.kit.ipd.sdq.atl2nmfs.helper.infos.TypeInfo
 
 /**
  * The OclOperationTransformerImpl Class.
@@ -166,10 +167,17 @@ class OclOperationTransformerImpl implements OclOperationTransformer {
 		} 
 		else {
 			// we have to find the lowest common super type which we have to use in the union operation
-			var lowestCommonSuperTypeInfo = atl2NmfSHelper.findLowestCommonSuperTypeInfoInInputMetamodel(
-				sourceReturnTypeInfo.metamodelName, sourceReturnTypeInfo.getTypeName,
-				argumentReturnTypeInfo.metamodelName, argumentReturnTypeInfo.getTypeName);
-
+			var lowestCommonSuperTypeInfo = null as TypeInfo;
+			try {
+				lowestCommonSuperTypeInfo = atl2NmfSHelper.findLowestCommonSuperTypeInfoInInputMetamodel(
+					sourceReturnTypeInfo.metamodelName, sourceReturnTypeInfo.getTypeName,
+					argumentReturnTypeInfo.metamodelName, argumentReturnTypeInfo.getTypeName);
+			}
+			catch (IllegalArgumentException e) {
+				lowestCommonSuperTypeInfo = atl2NmfSHelper.findLowestCommonSuperTypeInfoInOutputMetamodel(
+					sourceReturnTypeInfo.metamodelName, sourceReturnTypeInfo.getTypeName,
+					argumentReturnTypeInfo.metamodelName, argumentReturnTypeInfo.getTypeName);
+			}
 			transformedExpression = '''«transformedSource».Union<«lowestCommonSuperTypeInfo.getTransformedName»>(«transformedArguments»)''';
 		}
 
@@ -202,10 +210,10 @@ class OclOperationTransformerImpl implements OclOperationTransformer {
 		var inputModelInfos = atl2NmfSHelper.inputModelInfos;
 		var filteredInputModelInfos = inputModelInfos.filter[it.metamodelName.equals(metamodelName)];
 
-		if (filteredInputModelInfos.size != 1) {
+		/*if (filteredInputModelInfos.size != 1) {
 			throw new NotImplementedException(
 				"Multiple possible input models for the 'allInstances' OCL Operations are not supported yet")
-		}
+		}*/
 
 		var inputModelInfo = filteredInputModelInfos.get(0);
 
@@ -278,7 +286,19 @@ class OclOperationTransformerImpl implements OclOperationTransformer {
 			else {
 				transformedExpression = '''«transformedSource».«operationHelperName»(«transformedArguments»)''';
 			}
+		}
+		else if ("get".equals(expression.operationName)) {
+			transformedExpression = '''«transformedSource»[«transformedArguments»]''';
 		} 
+		else if ("toString".equals(expression.operationName)) {
+			transformedExpression = '''«transformedSource».ToString()''';
+		}
+		else if ("asSet".equals(expression.operationName)) {
+			transformedExpression = '''«transformedSource».Distinct()''';
+		}
+		else if ("newInstance".equals(expression.operationName)) {
+			transformedExpression = '''new «transformedSource.replace(".I", ".")»()'''
+		}
 		else {
 			throw new NotImplementedException(expression.operationName + " Operation is not supported yet")
 		}

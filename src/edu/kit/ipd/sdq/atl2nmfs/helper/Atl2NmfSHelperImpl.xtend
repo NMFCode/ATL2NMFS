@@ -13,6 +13,8 @@ import edu.kit.ipd.sdq.atl2nmfs.helper.infos.PossibleReturnTypeInfo
 import edu.kit.ipd.sdq.atl2nmfs.helper.infos.RuleInfo
 import edu.kit.ipd.sdq.atl2nmfs.helper.infos.HelperInfo
 import edu.kit.ipd.sdq.atl2nmfs.helper.infos.MetamodelInfo
+import org.eclipse.m2m.atl.common.OCL.OclType
+import org.eclipse.emf.ecore.EClassifier
 
 /**
  * The Atl2NmfSHelperImpl Class.
@@ -205,6 +207,13 @@ public class Atl2NmfSHelperImpl implements Atl2NmfSHelper {
 		return metamodelAnalyzer.findLowestCommonSuperTypeInfoInInputMetamodel(firstMetamodelName, firstTypeName,
 			secondMetamodelName, secondTypeName);
 	}
+	
+	
+	override TypeInfo findLowestCommonSuperTypeInfoInOutputMetamodel(String firstMetamodelName, String firstTypeName,
+		String secondMetamodelName, String secondTypeName) {
+		return metamodelAnalyzer.findLowestCommonSuperTypeInfoInOutputMetamodel(firstMetamodelName, firstTypeName,
+			secondMetamodelName, secondTypeName);
+	}
 
 	/* (non-Javadoc)
 	 * @see edu.kit.ipd.sdq.atl2nmfs.helper.Atl2NmfSHelper#getRequiredRuleInfos
@@ -232,16 +241,16 @@ public class Atl2NmfSHelperImpl implements Atl2NmfSHelper {
 	/* (non-Javadoc)
 	 * @see edu.kit.ipd.sdq.atl2nmfs.helper.Atl2NmfSHelper#transformExpression
 	 */
-	override String transformExpression(OclExpression expression) {
-		return oclTransformer.transformExpression(expression);
+	override String transformExpression(OclExpression expression, OclType type) {
+		return oclTransformer.transformExpression(expression, type);
 	}
 
 	/* (non-Javadoc)
 	 * @see edu.kit.ipd.sdq.atl2nmfs.helper.Atl2NmfSHelper#transformExpressionWithAmbiguousCall
 	 */
-	override String transformExpressionWithAmbiguousCall(OclExpression expression,
+	override String transformExpressionWithAmbiguousCall(OclExpression expression, OclType type,
 		PossibleReturnTypeInfo possibleReturnTypeInfo) {
-		return oclTransformer.transformExpressionWithAmbiguousCall(expression, possibleReturnTypeInfo);
+		return oclTransformer.transformExpressionWithAmbiguousCall(expression, type, possibleReturnTypeInfo);
 	}
 
 	/* (non-Javadoc)
@@ -319,6 +328,13 @@ public class Atl2NmfSHelperImpl implements Atl2NmfSHelper {
 	 */
 	override public List<HelperInfo> getAllHelperInfos() {
 		return atlHelperAnalyzer.getAllHelperInfos();
+	}
+	
+	
+	override public TypeInfo findClassifier(String metamodel, String classifierName) {
+		var inputType = metamodelAnalyzer.getTypeInfoFromInputMetamodel(metamodel, classifierName);
+		if (inputType != null) return inputType;
+		return metamodelAnalyzer.getTypeInfoFromOutputMetamodel(metamodel, classifierName);
 	}
 	
 }

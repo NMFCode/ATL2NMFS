@@ -4,6 +4,8 @@ import org.eclipse.m2m.atl.common.ATL.Binding
 import org.eclipse.m2m.atl.common.OCL.OclExpression
 import edu.kit.ipd.sdq.atl2nmfs.helper.Atl2NmfSHelper
 import org.apache.commons.lang.WordUtils
+import org.eclipse.m2m.atl.common.OCL.OCLFactory
+import org.eclipse.m2m.atl.common.OCL.OclModelElement
 
 /**
  * The BindingInfo Class.
@@ -18,6 +20,7 @@ class BindingInfo {
 	private final String transfromedOutputPropertyName;
 
 	private final OclExpression expression;
+	private final String location;
 	private String transformedExpression;
 
 	private ReturnTypeInfo ruleInputReturnTypeInfo;
@@ -41,6 +44,7 @@ class BindingInfo {
 		this.outputTypeName = outputTypeName;
 		this.outputPropertyName = binding.propertyName;
 		this.transfromedOutputPropertyName = WordUtils.capitalize(binding.propertyName);
+		this.location = binding.location;
 
 		// we have to delay the transformation since not all ATL rules and helpers are analyzed and registered yet
 		this.expression = binding.value;
@@ -71,6 +75,10 @@ class BindingInfo {
 	 */
 	def String getOutputPropertyName() {
 		return outputPropertyName;
+	}
+	
+	def String getLocation() {
+		return location;
 	}
 
 	/**
@@ -116,7 +124,13 @@ class BindingInfo {
 	 */
 	def String getTransformedDefaultExpression() {
 		if (transformedExpression == null) {
-			transformedExpression = atl2NmfSHelper.transformExpression(expression);
+			var returnType = this.getOutputReturnTypeInfo();
+			var typeInfo = null as OclModelElement;
+			if (returnType != null) {
+				typeInfo = OCLFactory.eINSTANCE.createOclModelElement();
+				typeInfo.name = returnType.typeName;
+			}
+			transformedExpression = atl2NmfSHelper.transformExpression(expression, typeInfo);
 		}
 
 		return transformedExpression;

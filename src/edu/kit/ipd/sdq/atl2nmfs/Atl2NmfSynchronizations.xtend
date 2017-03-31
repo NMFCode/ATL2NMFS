@@ -55,7 +55,7 @@ class Atl2NmfSynchronizations {
 	 * @throws Exception
 	 */
 	public def void doGenerate(String transformationName, String transformationFilePath, String outputPath,
-			List<String> inputMetamodelPaths, List<String> outputMetamodelPaths, boolean useMemorizationForAttributeHelper) throws Exception {
+			List<String> inputMetamodelPaths, List<String> outputMetamodelPaths, boolean useMemorizationForAttributeHelper, boolean transformationOnly) throws Exception {
 
 		// check if the file exist
 		var transformationFile = new File(transformationFilePath);
@@ -84,18 +84,21 @@ class Atl2NmfSynchronizations {
 			}
 		}
 
-		// TODO: analyze ATL transformation and check if all the used ATL
-		// constructs are supported by the Atl2NmfS HOT
-
-		// copy the required files into the output directory
-		FileUtils.copyDirectory(new File("resources/Libs"), new File(outputPath + "/Libs"));
+		if (!transformationOnly) {		
+			// copy the required files into the output directory
+			FileUtils.copyDirectory(new File("resources/Libs"), new File(outputPath + "/Libs"));
+		}
 
 		// initialize and run the higher-order transformation
 		fileSystemAccess.setOutputPath(outputPath);
 		atlTransformer.initialize(fileSystemAccess, parsedAtlModule, parsedAtlLibraries, inputMetamodelPaths,
 				outputMetamodelPaths, useMemorizationForAttributeHelper);
 
-		var projectFileName = transformationName + ".csproj";
-		atlTransformer.createCSharpCode(outputPath, projectFileName);
+		if (transformationOnly) {
+			atlTransformer.createTransformationOnly(outputPath);
+		} else {
+			var projectFileName = transformationName + ".csproj";
+			atlTransformer.createCSharpCode(outputPath, projectFileName);			
+		}
 	}
 }

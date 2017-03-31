@@ -11,6 +11,7 @@ import edu.kit.ipd.sdq.atl2nmfs.helper.infos.PossibleReturnTypeInfo
 import edu.kit.ipd.sdq.atl2nmfs.helper.infos.RuleInfo
 import edu.kit.ipd.sdq.atl2nmfs.helper.infos.HelperInfo
 import edu.kit.ipd.sdq.atl2nmfs.helper.infos.MetamodelInfo
+import org.eclipse.m2m.atl.common.OCL.OclType
 
 /**
  * The Atl2NmfSHelper Interface.
@@ -31,6 +32,8 @@ interface Atl2NmfSHelper {
 	 */
 	def void initializeNewTransformation(Module atlModule, List<Library> atlLibraries, List<String> inputMetamodelPaths,
 		List<String> outputMetamodelPaths);
+		
+	def TypeInfo findClassifier(String metamodel, String classifierName);
 
 	/**
 	 * Gets the transformation name.
@@ -168,6 +171,10 @@ interface Atl2NmfSHelper {
 	 */
 	def TypeInfo findLowestCommonSuperTypeInfoInInputMetamodel(String firstMetamodelName, String firstTypeName,
 		String secondMetamodelName, String secondTypeName);
+		
+		
+	def TypeInfo findLowestCommonSuperTypeInfoInOutputMetamodel(String firstMetamodelName, String firstTypeName,
+		String secondMetamodelName, String secondTypeName);
 
 	/**
 	 * Transform OCL expression.
@@ -176,7 +183,7 @@ interface Atl2NmfSHelper {
 	 *            the OCL expression
 	 * @return the transformed OCL expression as string
 	 */
-	def String transformExpression(OclExpression expression);
+	def String transformExpression(OclExpression expression, OclType type);
 
 	/**
 	 * Transform OLC expression with ambiguous calls.
@@ -187,7 +194,7 @@ interface Atl2NmfSHelper {
 	 *            the possible return type
 	 * @return the transformed OCL expression as string
 	 */
-	def String transformExpressionWithAmbiguousCall(OclExpression expression,
+	def String transformExpressionWithAmbiguousCall(OclExpression expression, OclType type,
 		PossibleReturnTypeInfo possibleReturnType);
 
 	/**

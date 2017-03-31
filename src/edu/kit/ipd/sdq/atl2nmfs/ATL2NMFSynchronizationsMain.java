@@ -1,11 +1,6 @@
 package edu.kit.ipd.sdq.atl2nmfs;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
-import org.junit.Assert;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
@@ -30,8 +25,11 @@ public class ATL2NMFSynchronizationsMain {
 	@Parameter(names = { "-targetMM" }, description = "The path to the target metamodel. This option can be specified multiple times", required = true)
 	private List<String> outputMetamodelPaths;
 	
-	@Parameter(names = {"-cacheAttributeHelpers" }, description = "If specified, the transformation makes sure that attribute helpers are cached")
+	@Parameter(names = { "-cacheAttributeHelpers" }, description = "If specified, the transformation makes sure that attribute helpers are cached")
 	private boolean cacheHelpers;
+	
+	@Parameter(names = { "-transformationOnly" }, description = "If specified, only transform the transformation itself, not the metamodels")
+	private boolean transformationOnly;
 
 	public static void main(String[] args) {
 		
@@ -54,9 +52,10 @@ public class ATL2NMFSynchronizationsMain {
 		try {
 			Atl2NmfSynchronizations atl2NmfSynchronizations = new Atl2NmfSynchronizations();
 			atl2NmfSynchronizations.doGenerate(transformationName, transformationPath, outputPath, inputMetamodelPaths,
-					outputMetamodelPaths, cacheHelpers);
+					outputMetamodelPaths, cacheHelpers, transformationOnly);
 		} catch (Exception exception) {
-			Assert.fail("Execution of the Atl2NmfS HOT failed. Exception message: " + exception.getMessage());
+			System.err.println("Execution of the Atl2NmfS HOT failed. Exception message: " + exception.getMessage());
+			exception.printStackTrace();
 		}
 	}
 

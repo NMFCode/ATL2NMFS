@@ -44,7 +44,7 @@ public class TransformationTests {
 		try {
 			Atl2NmfSynchronizations atl2NmfSynchronizations = new Atl2NmfSynchronizations();
 			atl2NmfSynchronizations.doGenerate(transformationName, transformationPath, outputPath, inputMetamodelPaths,
-					outputMetamodelPaths, false);
+					outputMetamodelPaths, false, false);
 		} catch (Exception exception) {
 			Assert.fail("Execution of the Atl2NmfS HOT failed. Exception message: " + exception.getMessage());
 		}

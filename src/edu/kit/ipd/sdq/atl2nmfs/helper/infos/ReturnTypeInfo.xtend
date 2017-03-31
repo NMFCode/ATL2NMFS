@@ -26,12 +26,12 @@ class ReturnTypeInfo {
 	 * @param typeName
 	 *            the type name
 	 */
-	new(String metamodelName, String typeName) {
+	new(String metamodelName, String typeName, boolean isClass) {
 		this.metamodelName = StringUtils.capitalize(metamodelName);
 		this.typeName = StringUtils.capitalize(typeName);
 
 		this.isTypeCollection = false;
-		this.isTypePrimitive = false;
+		this.isTypePrimitive = !isClass;
 		this.isAmbiguous = false;
 		this.lazyRuleInfo = null;
 		this.possibleReturnTypeInfos = null;
@@ -48,9 +48,9 @@ class ReturnTypeInfo {
 	new(RuleInfo lazyRuleInfo, ReturnTypeInfo argumentsReturnTypeInfo) {
 		this.lazyRuleInfo = lazyRuleInfo;
 
-		this.metamodelName = argumentsReturnTypeInfo.metamodelName;
-		this.typeName = argumentsReturnTypeInfo.typeName;
-		this.isTypeCollection = argumentsReturnTypeInfo.isTypeCollection;
+		this.metamodelName = lazyRuleInfo.outputTypeMetamodelName;
+		this.typeName = lazyRuleInfo.outputTypeName;
+		this.isTypeCollection = false;
 
 		this.isTypePrimitive = false;
 		this.isAmbiguous = false;

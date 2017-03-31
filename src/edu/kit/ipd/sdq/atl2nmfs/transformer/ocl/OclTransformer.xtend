@@ -2,6 +2,7 @@ package edu.kit.ipd.sdq.atl2nmfs.transformer.ocl;
 
 import org.eclipse.m2m.atl.common.OCL.OclExpression;
 import edu.kit.ipd.sdq.atl2nmfs.helper.infos.PossibleReturnTypeInfo
+import org.eclipse.m2m.atl.common.OCL.OclType
 
 /**
  * The OclTransformer Interface.
@@ -15,7 +16,7 @@ interface OclTransformer {
 	 *            the OCL expression
 	 * @return the created LINQ expression as string
 	 */
-	def String transformExpression(OclExpression expression);
+	def String transformExpression(OclExpression expression, OclType type);
 
 	/**
 	 * Transforms an OCL expression with ambiguous calls into a LINQ expression.
@@ -26,7 +27,7 @@ interface OclTransformer {
 	 *            the possible return type info which should be used to solve ambiguous calls
 	 * @return the created LINQ expression as string
 	 */
-	def String transformExpressionWithAmbiguousCall(OclExpression expression,
+	def String transformExpressionWithAmbiguousCall(OclExpression expression, OclType type,
 		PossibleReturnTypeInfo possibleReturnTypeInfo);
 
 }

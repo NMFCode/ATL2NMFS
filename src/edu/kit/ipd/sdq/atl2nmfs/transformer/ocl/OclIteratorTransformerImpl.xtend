@@ -94,7 +94,7 @@ class OclIteratorTransformerImpl implements OclIteratorTransformer {
 		// we have to detect "select(c | c.oclIsKindOf(X!Y))" and transform it into "OfType<X.Y>()" instead of "Where(e => e is X.Y)" without an cast
 		// we would have to cast it afterwards ("Where(c => c is X.Y).OfType<X.Y>()") what could result in runtime errors (null argument exceptions)
 		if (operationBodyExpression != null && operationBodyExpression.operationName.equals("oclIsKindOf")) {
-			var argument = atl2NmfSHelper.transformExpression(operationBodyExpression.arguments.get(0));
+			var argument = atl2NmfSHelper.transformExpression(operationBodyExpression.arguments.get(0), null);
 			transformedExpression = '''«transformedSource».OfType<«argument»>()'''
 		} 
 		else {

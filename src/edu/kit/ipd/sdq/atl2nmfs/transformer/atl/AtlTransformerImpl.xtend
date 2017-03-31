@@ -91,6 +91,11 @@ class AtlTransformerImpl implements AtlTransformer {
 		createTransformationFiles();
 		createProjectFile(projectFileName);
 	}
+	
+	
+	public override void createTransformationOnly(String outputPath) {
+		createTransformationFiles();
+	}
 
 	/**
 	 * Transforms the ecore metamodels.
